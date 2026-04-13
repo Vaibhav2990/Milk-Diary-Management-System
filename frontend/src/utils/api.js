@@ -2,41 +2,41 @@ import axios from 'axios';
 
 // ✅ Base URL (IMPORTANT)
 const API = axios.create({
-    baseURL: "https://milk-diary-management-system.onrender.com/api"
+  baseURL: "https://milk-diary-management-system.onrender.com/api"
 });
 
 // ==============================
 // Request Interceptor (Attach Token)
 // ==============================
 API.interceptors.request.use(
-    (config) => {
-        try {
-            const user = JSON.parse(localStorage.getItem('dairyUser') || 'null');
+  (config) => {
+    try {
+      const user = JSON.parse(localStorage.getItem('dairyUser') || 'null');
 
-            if (user ? .token) {
-                config.headers.Authorization = `Bearer ${user.token}`;
-            }
-        } catch (error) {
-            console.error('Error parsing user:', error);
-        }
+      if (user?.token) {
+        config.headers.Authorization = `Bearer ${user.token}`;
+      }
+    } catch (error) {
+      console.error('Error parsing user:', error);
+    }
 
-        return config;
-    },
-    (error) => Promise.reject(error)
+    return config;
+  },
+  (error) => Promise.reject(error)
 );
 
 // ==============================
 // Response Interceptor (Handle 401)
 // ==============================
 API.interceptors.response.use(
-    (response) => response,
-    (error) => {
-        if (error.response ? .status === 401) {
-            localStorage.removeItem('dairyUser');
-            window.location.href = '/login';
-        }
-        return Promise.reject(error);
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('dairyUser');
+      window.location.href = '/login';
     }
+    return Promise.reject(error);
+  }
 );
 
 // ==============================
@@ -63,7 +63,7 @@ export const createOrder = (data) => API.post('/orders', data);
 export const getMyOrders = () => API.get('/orders/my');
 export const getAllOrders = (params) => API.get('/orders', { params });
 export const updateOrderStatus = (id, data) =>
-    API.put(`/orders/${id}/status`, data);
+  API.put(`/orders/${id}/status`, data);
 export const cancelOrder = (id) => API.put(`/orders/${id}/cancel`);
 
 // ==============================
@@ -82,15 +82,15 @@ export const getMySupplies = () => API.get('/supply/my');
 export const getAllSupplies = () => API.get('/supply');
 export const updateSupply = (id, data) => API.put(`/supply/${id}`, data);
 export const updatePaymentStatus = (id, data) =>
-    API.put(`/supply/${id}/payment`, data);
+  API.put(`/supply/${id}/payment`, data);
 
 // ==============================
 // DELIVERY APIs
 // ==============================
 export const getMyDeliveries = (params) =>
-    API.get('/delivery/my', { params });
+  API.get('/delivery/my', { params });
 export const updateDeliveryStatus = (id, data) =>
-    API.put(`/delivery/${id}/status`, data);
+  API.put(`/delivery/${id}/status`, data);
 export const createDelivery = (data) => API.post('/delivery', data);
 export const getAllDeliveries = () => API.get('/delivery');
 
@@ -98,15 +98,15 @@ export const getAllDeliveries = () => API.get('/delivery');
 // SUBSCRIPTION APIs
 // ==============================
 export const createSubscription = (data) =>
-    API.post('/subscriptions', data);
+  API.post('/subscriptions', data);
 export const getMySubscriptions = () =>
-    API.get('/subscriptions/my');
+  API.get('/subscriptions/my');
 export const getAllSubscriptions = () =>
-    API.get('/subscriptions');
+  API.get('/subscriptions');
 export const updateSubscription = (id, data) =>
-    API.put(`/subscriptions/${id}`, data);
+  API.put(`/subscriptions/${id}`, data);
 export const cancelSubscription = (id) =>
-    API.put(`/subscriptions/${id}/cancel`);
+  API.put(`/subscriptions/${id}/cancel`);
 
 // ==============================
 // ANALYTICS APIs
