@@ -1,24 +1,28 @@
 import axios from 'axios';
 
 const API = axios.create({
-    baseURL: process.env.REACT_APP_API_URL,
+  baseURL: process.env.REACT_APP_API_URL
 });
 
+// Add token automatically
 API.interceptors.request.use((config) => {
-    const user = JSON.parse(localStorage.getItem('dairyUser') || 'null');
-    if (user ? .token) config.headers.Authorization = `Bearer ${user.token}`;
-    return config;
+  const user = JSON.parse(localStorage.getItem('dairyUser') || 'null');
+  if (user?.token) {
+    config.headers.Authorization = `Bearer ${user.token}`;
+  }
+  return config;
 });
 
+// Handle unauthorized
 API.interceptors.response.use(
-    (res) => res,
-    (err) => {
-        if (err.response ? .status === 401) {
-            localStorage.removeItem('dairyUser');
-            window.location.href = '/login';
-        }
-        return Promise.reject(err);
+  (res) => res,
+  (err) => {
+    if (err.response?.status === 401) {
+      localStorage.removeItem('dairyUser');
+      window.location.href = '/login';
     }
+    return Promise.reject(err);
+  }
 );
 
 // Auth
