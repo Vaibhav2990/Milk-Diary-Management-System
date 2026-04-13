@@ -8,7 +8,22 @@ connectDB();
 
 const app = express();
 
-app.use(cors({ origin: process.env.CLIENT_URL || '*', credentials: true }));
+const allowedOrigins = [
+    process.env.CLIENT_URL,
+    "http://localhost:3000",
+    "https://milk-diary-management-system.vercel.app/login"
+];
+
+app.use(cors({
+    origin: function(origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true
+}));
 app.use(express.json());
 
 // Routes
@@ -28,8 +43,8 @@ app.use((req, res) => res.status(404).json({ message: 'Route not found' }));
 
 // Error handler
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: 'Internal Server Error' });
+    console.error(err.stack);
+    res.status(500).json({ message: 'Internal Server Error' });
 });
 
 const PORT = process.env.PORT || 5000;
