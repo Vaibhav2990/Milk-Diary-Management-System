@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-// Create API instance
+// ✅ Base URL (IMPORTANT)
 const API = axios.create({
-    baseURL: process.env.REACT_APP_API_URL || '',
+    baseURL: "https://milk-diary-management-system.onrender.com/api"
 });
 
 // ==============================
@@ -13,11 +13,11 @@ API.interceptors.request.use(
         try {
             const user = JSON.parse(localStorage.getItem('dairyUser') || 'null');
 
-            if (user && user.token) {
+            if (user ? .token) {
                 config.headers.Authorization = `Bearer ${user.token}`;
             }
         } catch (error) {
-            console.error('Error parsing user from localStorage:', error);
+            console.error('Error parsing user:', error);
         }
 
         return config;
@@ -31,7 +31,7 @@ API.interceptors.request.use(
 API.interceptors.response.use(
     (response) => response,
     (error) => {
-        if (error.response && error.response.status === 401) {
+        if (error.response ? .status === 401) {
             localStorage.removeItem('dairyUser');
             window.location.href = '/login';
         }
@@ -113,5 +113,4 @@ export const cancelSubscription = (id) =>
 // ==============================
 export const getAnalytics = () => API.get('/analytics');
 
-// Default export
 export default API;
