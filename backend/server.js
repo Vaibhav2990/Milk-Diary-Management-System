@@ -8,22 +8,23 @@ connectDB();
 
 const app = express();
 
-const allowedOrigins = [
-    process.env.CLIENT_URL,
-    "http://localhost:3000",
-    "https://milk-diary-management-system.vercel.app/login"
-];
+// ✅ CORS Configuration (FINAL FIX)
+const corsOptions = {
+    origin: [
+        process.env.CLIENT_URL,
+        "http://localhost:3000"
+    ],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+};
 
-app.use(cors({
-    origin: function(origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error("Not allowed by CORS"));
-        }
-    },
-    credentials: true
-}));
+// Apply CORS
+app.use(cors(corsOptions));
+
+// Handle preflight requests
+app.options('*', cors(corsOptions));
+
 app.use(express.json());
 
 // Routes
@@ -36,15 +37,20 @@ app.use('/api/delivery', require('./routes/delivery'));
 app.use('/api/subscriptions', require('./routes/subscriptions'));
 app.use('/api/analytics', require('./routes/analytics'));
 
-app.get('/', (req, res) => res.json({ message: '🥛 Milk Dairy Management System API Running' }));
+// Root route
+app.get('/', (req, res) => {
+    res.json({ message: '🥛 Milk Dairy Management System API Running' });
+});
 
-// 404
-app.use((req, res) => res.status(404).json({ message: 'Route not found' }));
+// 404 handler
+app.use((req, res) => {
+    res.status(404).json({ message: 'Route not found' });
+});
 
 // Error handler
 app.use((err, req, res, next) => {
     console.error(err.stack);
-    res.status(500).json({ message: 'Internal Server Error' });
+    res.status(500).json({ message: err.message || 'Internal Server Error' });
 });
 
 const PORT = process.env.PORT || 5000;
