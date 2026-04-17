@@ -475,17 +475,17 @@ docs: add comprehensive README
 ## 👨‍💻 Author
 
 **Vaibhav Choure**
-- Roll No: SA148
+- Roll No: SA148 & SA147
 - University: G H Raisoni International Skill Tech University
 - Department: School of Engineering & Technology (SOET)
-- Subject: Web Technology
-- Guide: Prof. Jayvrat Dwivedi (Assistant Professor, SOET)
+- Subject: Java Programming Skills 
+- Guide: Prof. Dashrath Waghmare (Assistant Professor, SOET)
 
 ---
 
 ## 📄 License
 
-This project is created for educational purposes as part of the Web Technology course curriculum.
+This project is created for educational purposes as part of the Java Proogramming Skills course curriculum.
 
 ---
 
